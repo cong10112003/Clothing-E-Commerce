@@ -6,6 +6,8 @@ import 'package:food_app/common/color_extension.dart';
 import 'package:food_app/common_widget/icon_text_button.dart';
 import 'package:food_app/common_widget/menu_row.dart';
 import 'package:food_app/login/login_page.dart';
+import 'package:food_app/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Account extends StatefulWidget {
@@ -69,13 +71,18 @@ class _AccountState extends State<Account> {
     );
   }
 
+  Future<void> _refreshCartData() async {
+    await fetchCustomerData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     var media = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: TColor.bg,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light ? TColor.bg : Colors.black12,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
         automaticallyImplyLeading: false,
         elevation: 0,
         actions: [
@@ -97,8 +104,8 @@ class _AccountState extends State<Account> {
           children: [
             Container(
               width: media.width,
-              decoration: const BoxDecoration(
-                  color: Colors.white,
+              decoration:  BoxDecoration(
+                  color: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1)]),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,8 +152,8 @@ class _AccountState extends State<Account> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 4),
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
+              decoration:  BoxDecoration(
+                  color: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1)]),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -169,8 +176,8 @@ class _AccountState extends State<Account> {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 4),
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
+              decoration:  BoxDecoration(
+                  color: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                   boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1)]),
               child: Column(
                 children: [
@@ -191,12 +198,25 @@ class _AccountState extends State<Account> {
                   MenuRow(
                     icon: "assets/img/find_friends.png",
                     title: "Information",
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Customerinformation(customerId: customerId)));
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Customerinformation(customerId: customerId),
+                        ),
+                      );
+                      if (result != null) {
+                        String customerName = result['customerName'];
+                        String email = result['email'];
+
+                        // Cập nhật lại customerName và email
+                        setState(() {
+                          customerName = _customerName;
+                          email = _Email;
+                        });
+                        await _refreshCartData();
+                      }
                     },
                   ),
                   const Divider(

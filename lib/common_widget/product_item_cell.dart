@@ -5,8 +5,10 @@ import 'package:food_app/admin_manager/Category%20Control/put_product.dart';
 import 'package:food_app/api/api_delete.dart';
 import 'package:food_app/api/api_put.dart';
 import 'package:food_app/common/color_extension.dart';
+import 'package:food_app/theme_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class ProductItemCell extends StatelessWidget {
   
@@ -51,6 +53,7 @@ class ProductItemCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     NumberFormat currencyFormat =
         NumberFormat.currency(locale: 'vi_VN', symbol: 'VNĐ');
     var media = MediaQuery.of(context).size;
@@ -97,8 +100,14 @@ class ProductItemCell extends StatelessWidget {
       width: media.width * 0.4,
       height: media.width * 0.7,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
         borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: themeProvider.themeMode == ThemeMode.light
+          ? Colors.grey.shade300 
+          : Colors.grey.shade700,
+      width: 1.5, // Độ dày viền
+    ),
         boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1))
         ],
@@ -128,7 +137,7 @@ class ProductItemCell extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: TextStyle(
-                      color: TColor.text,
+                      color: themeProvider.themeMode == ThemeMode.light ? TColor.text : TColor.primary,
                       fontSize: 14,
                       fontWeight: FontWeight.w700),
                 ),

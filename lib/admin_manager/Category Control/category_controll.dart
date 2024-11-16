@@ -4,6 +4,8 @@ import 'package:food_app/Category/category_detail_view.dart';
 import 'package:food_app/admin_manager/Category%20Control/add_category.dart';
 import 'package:food_app/api/api_get.dart';
 import 'package:food_app/common/color_extension.dart';
+import 'package:food_app/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class CategoryControll extends StatefulWidget {
   const CategoryControll({super.key});
@@ -29,6 +31,7 @@ class _CategoryControllState extends State<CategoryControll> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: TColor.bg,
       body: NestedScrollView(
@@ -36,7 +39,7 @@ class _CategoryControllState extends State<CategoryControll> {
             return [
               SliverAppBar(
                 automaticallyImplyLeading: false,
-                backgroundColor: Colors.white,
+                backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                 elevation: 0,
                 pinned: true,
                 floating: false,
@@ -54,11 +57,12 @@ class _CategoryControllState extends State<CategoryControll> {
                           fontWeight: FontWeight.w700),
                     ),
                     TextButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AddCategory()));
+                                await _refreshCategories();
                       },
                       child: Text(
                         "Add",
@@ -73,57 +77,59 @@ class _CategoryControllState extends State<CategoryControll> {
               ),
             ];
           },
-          body: SizedBox(
-            child: RefreshIndicator(
-              onRefresh: _refreshCategories,
-              child: FutureBuilder<List<dynamic>>(
-                future: getCategories(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Lỗi: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return ListView( // Bọc ListView để có thể refresh khi danh sách trống
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: Center(
-                  child: Text("Don't have any category yet"),
+          body: Scaffold(
+            body: SizedBox(
+              child: RefreshIndicator(
+                onRefresh: _refreshCategories,
+                child: FutureBuilder<List<dynamic>>(
+                  future: getCategories(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Lỗi: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return ListView( // Bọc ListView để có thể refresh khi danh sách trống
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Center(
+                    child: Text("Don't have any category yet"),
+                  ),
                 ),
-              ),
-            ],
-          );
-        } else {
-                    final items = snapshot.data!;
-                    return GridView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 12),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12,
-                                childAspectRatio: 1),
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          var item = items[index] as Map? ?? {};
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryDetailView(item: item),
-                                  ),
-                                );
-                              },
-                              child: CategoryCell(
-                                item: item,
-                              ));
-                        });
-                  }
-                },
+              ],
+            );
+                    } else {
+                      final items = snapshot.data!;
+                      return GridView.builder(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 12),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
+                                  childAspectRatio: 1),
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            var item = items[index] as Map? ?? {};
+                            return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CategoryDetailView(item: item),
+                                    ),
+                                  );
+                                },
+                                child: CategoryCell(
+                                  item: item,
+                                ));
+                          });
+                    }
+                  },
+                ),
               ),
             ),
           )),

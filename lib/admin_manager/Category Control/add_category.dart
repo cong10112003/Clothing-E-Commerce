@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/api/api_post.dart';
+import 'package:food_app/common/color_extension.dart';
+import 'package:food_app/common_widget/round_button.dart';
 
 class AddCategory extends StatefulWidget {
   const AddCategory({super.key});
@@ -46,7 +48,15 @@ class _AddCategoryState extends State<AddCategory> {
             children: [
               TextFormField(
                 controller: txtNameCatgory,
-                decoration: InputDecoration(labelText: 'Category Name'),
+                cursorColor: Colors.blue,
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                  labelText: 'Category Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name';
@@ -55,9 +65,9 @@ class _AddCategoryState extends State<AddCategory> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              RoundButton(
                 onPressed: _submitForm,
-                child: Text('Add Category'),
+                title: 'Add Category',
               ),
             ],
           ),

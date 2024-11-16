@@ -8,14 +8,16 @@ class LineTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool isClear;
   final VoidCallback? onClearPressed;
-  const LineTextField(
-      {super.key,
-      required this.hitText,
-      required this.controller,
-      this.obscureText = false,
-      this.keyboardType,
-      this.isClear = false,
-      this.onClearPressed});
+
+  const LineTextField({
+    super.key,
+    required this.hitText,
+    required this.controller,
+    this.obscureText = false,
+    this.keyboardType,
+    this.isClear = false,
+    this.onClearPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,31 +27,35 @@ class LineTextField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black), // Màu chữ khi nhập
         decoration: InputDecoration(
-            hintText: hitText,
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: TColor.gray),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: TColor.primary),
-            ),
-            suffixIcon: isClear
-                ? IconButton(
-                    onPressed: () {
-                      if (onClearPressed != null) {
-                        onClearPressed!();
-                      }
-                    },
-                    icon: Image.asset(
-                      "assets/img/cancel.png",
-                      width: 15,
-                    ))
-                : null),
+          hintText: hitText,
+          hintStyle: TextStyle(color: Colors.grey), // Màu của placeholder
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: TColor.gray),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: TColor.primary),
+          ),
+          suffixIcon: isClear
+              ? IconButton(
+                  onPressed: () {
+                    if (onClearPressed != null) {
+                      onClearPressed!();
+                    }
+                  },
+                  icon: Image.asset(
+                    "assets/img/cancel.png",
+                    width: 15,
+                  ),
+                )
+              : null,
+        ),
       ),
     );
   }
 }
+
 
 class RoundTextField extends StatelessWidget {
   final TextEditingController controller;

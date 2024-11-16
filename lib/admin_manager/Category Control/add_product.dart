@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/api/api_put.dart';
+import 'package:food_app/common/color_extension.dart';
+import 'package:food_app/common_widget/round_button.dart';
 
 class AddProduct extends StatefulWidget {
   final Map item;
@@ -63,7 +65,14 @@ class _AddProductState extends State<AddProduct> {
               children: [
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Product Name'),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                    labelText: 'Product Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a name';
@@ -73,7 +82,14 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                    labelText: 'Description'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter details';
@@ -83,7 +99,14 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 TextFormField(
                   controller: _rateController,
-                  decoration: InputDecoration(labelText: 'Rate'),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                    labelText: 'Rate'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -97,7 +120,14 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 TextFormField(
                   controller: _priceController,
-                  decoration: InputDecoration(labelText: 'Price'),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                    labelText: 'Price'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -111,7 +141,14 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 TextFormField(
                   controller: _thumbnailController,
-                  decoration: InputDecoration(labelText: 'Image URL'),
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: TColor.primary),
+                    ),
+                    labelText: 'Image URL'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter an image URL';
@@ -120,9 +157,9 @@ class _AddProductState extends State<AddProduct> {
                   },
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
+                RoundButton(
                   onPressed: _postItem,
-                  child: Text('Add Item'),
+                  title: 'Add Item',
                 ),
               ],
             ),

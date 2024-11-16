@@ -87,3 +87,16 @@ Future<void> addToCart(Map<String, dynamic> itemToCart) async {
     throw Exception('Failed to Add to cart ');
   }
 }
+Future<void> addOrderProductHistory(Map<String, dynamic> itemHistoryOrder) async {
+  final response = await http.post(
+    Uri.parse('$FOOD_ITEM/OrderProducts/PostOrderProduct'),
+    headers: {'Content-Type': 'application/json'},
+    body: json.encode(itemHistoryOrder),
+  );
+
+  if (response.statusCode == 201) {
+    print('Order successfully');
+  } else {
+    throw Exception('Failed to Order ');
+  }
+}

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/theme_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Orderhistorydetail extends StatefulWidget {
   final Map item;
@@ -16,6 +19,9 @@ class Orderhistorydetail extends StatefulWidget {
 class _OrderhistorydetailState extends State<Orderhistorydetail> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final NumberFormat currencyFormat = NumberFormat("#,##0", "vi_VN");
+    final String formattedPrice = currencyFormat.format(widget.item['Price']);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Order Details"),
@@ -27,13 +33,63 @@ class _OrderhistorydetailState extends State<Orderhistorydetail> {
           final price = widget.item['Price'];
           final thumbnail = widget.item['ThumbNail'];
 
-          return ListTile(
-            leading: thumbnail != null
-                ? Image.network(thumbnail)
-                : const Icon(Icons.image),
-            title: Text(productName),
-            subtitle: Text('Price: $price ₫'),
-          );
+          return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 6,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Ảnh sản phẩm
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                thumbnail,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Thông tin sản phẩm
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    productName,
+                    style:  TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: themeProvider.themeMode == ThemeMode.light ? Colors.black : Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Price: $formattedPrice',
+                    style:  TextStyle(
+                      fontSize: 14,
+                      color: themeProvider.themeMode == ThemeMode.light ? Colors.black : Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
         },
       ),
     );

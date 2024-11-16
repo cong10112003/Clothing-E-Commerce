@@ -132,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
+                  style: TextStyle(color: Colors.black),
                 ),
                 SizedBox(
                   height: 10,
@@ -150,6 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Password',
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
+                  style: TextStyle(color: Colors.black)
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

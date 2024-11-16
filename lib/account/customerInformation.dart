@@ -48,11 +48,13 @@ class _CustomerinformationState extends State<Customerinformation> {
         "BirthYear": int.tryParse(birthYearController.text),
         "Email": emailController.text
       };
-      print(prefs.getInt('CustomerID'));
       await updateCustomerInformation(widget.customerId, updatedData);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Customer information updated successfully')));
-      Navigator.pop(context);
+      Navigator.pop(context, {
+  'customerName': customerNameController.text,
+  'email': emailController.text,
+});
     }
   }
 

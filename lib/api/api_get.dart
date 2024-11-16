@@ -147,3 +147,26 @@ Future<Map<String, dynamic>?> getOrderHistoryByID(int orHisID) async {
   }
 }
 
+//get current order id
+Future<dynamic> getEmptyOrderProductIDs(int customerID) async {
+  final url = Uri.parse('$FOOD_ITEM/Customers/Get/$customerID');
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body) as Map<String, dynamic>;
+    final orderHistories = data['OrderHistories'] as List<dynamic>;
+
+    // Lọc các OrderID có OrderProducts rỗng
+    final emptyOrderProductIDs = orderHistories
+        .where((order) => (order['OrderProducts'] as List).isEmpty)
+        .map((order) => order['OrderID'] as int)
+        .toList();
+
+    // Trả về OrderID đầu tiên hoặc null nếu không có OrderID nào
+    return emptyOrderProductIDs.isNotEmpty ? emptyOrderProductIDs.first : null;
+  } else {
+    throw Exception('Failed to fetch OrderID');
+  }
+}
+
+

@@ -3,13 +3,11 @@ import 'package:food_app/api/api_get.dart';
 import 'package:food_app/cart/cart.dart';
 import 'package:food_app/common_widget/product_item_cell.dart';
 import 'package:food_app/common_widget/line_textfield.dart';
-import 'package:food_app/common_widget/popular_food_item_cell.dart';
 import 'package:food_app/common_widget/selection_text_view.dart';
 import 'package:food_app/common/color_extension.dart';
-import 'package:food_app/home/collection_food_item_cell.dart';
-import 'package:food_app/home/outlet_list_view.dart';
 import 'package:food_app/food_detail/product_item_detail_view.dart';
-import 'package:food_app/restaurant_detail/restaurant_detail_view.dart';
+import 'package:food_app/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,10 +17,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  bool isSelectCity = false;
   TextEditingController txtSearch = TextEditingController();
-  //
-  // ItemListViewModel itemListViewModel = ItemListViewModel();
   @override
   void initState() {
     // TODO: implement initState
@@ -32,33 +27,22 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     var media = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: TColor.bg,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light
+          ? TColor.bg // Màu nền chế độ sáng
+          : Colors.black38,
       body:
-          // isSelectCity
-          //     ?
           NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                     elevation: 0,
                     pinned: true,
                     floating: false,
                     centerTitle: false,
-                    // leading: IconButton(
-                    //   icon: Image.asset(
-                    //     "assets/img/back.png",
-                    //     width: 24,
-                    //     height: 30,
-                    //   ),
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       isSelectCity = false;
-                    //     });
-                    //   },
-                    // ),
                     leading: SizedBox(),
                     leadingWidth: 0,
                     title: Column(
@@ -68,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
                           "Thành phố Hồ Chí Minh",
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: TColor.text,
+                              color: themeProvider.themeMode == ThemeMode.light ? TColor.text : Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.w700),
                         ),
@@ -76,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
                           "828 Sư Vạn Hạnh, quận 10",
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: TColor.gray,
+                              color: themeProvider.themeMode == ThemeMode.light ? TColor.text : Colors.grey,
                               fontSize: 16,
                               fontWeight: FontWeight.w700),
                         ),
@@ -84,21 +68,22 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     actions: [
                       IconButton(
-                        icon: Image.asset(
-                          "assets/img/notification.png",
-                          width: 24,
-                          height: 30,
+                        icon: Icon(
+                          Provider.of<ThemeProvider>(context).themeMode ==
+                                  ThemeMode.light
+                              ? Icons.dark_mode
+                              : Icons.light_mode,
+                          color: TColor.gray,
                         ),
                         onPressed: () {
-                          setState(() {
-                            isSelectCity = false;
-                          });
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleTheme();
                         },
                       ),
                     ],
                   ),
                   SliverAppBar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                     elevation: 1,
                     pinned: false,
                     floating: true,
@@ -135,7 +120,8 @@ class _HomeViewState extends State<HomeView> {
                                 child: Text('Lỗi: ${snapshot.error}'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return Center(child: Text("Don't have any item yet"));
+                            return Center(
+                                child: Text("Don't have any item yet"));
                           } else {
                             final items = snapshot.data!
                                 .where((item) =>
@@ -193,7 +179,8 @@ class _HomeViewState extends State<HomeView> {
                                 child: Text('Lỗi: ${snapshot.error}'));
                           } else if (!snapshot.hasData ||
                               snapshot.data!.isEmpty) {
-                            return Center(child: Text("Don't have any item yet"));
+                            return Center(
+                                child: Text("Don't have any item yet"));
                           } else {
                             final items = snapshot.data!;
                             return ListView.builder(
@@ -273,7 +260,7 @@ class _HomeViewState extends State<HomeView> {
                     SelectionTextView(
                       title: "Trending vendors",
                       onSeeAllTap: () {},
-                    ),   
+                    ),
                   ],
                 ),
               )),
@@ -288,8 +275,6 @@ class _HomeViewState extends State<HomeView> {
         ),
         backgroundColor: TColor.primary,
       ),
-      
     );
   }
-  
 }

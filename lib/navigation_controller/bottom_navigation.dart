@@ -5,7 +5,9 @@ import 'package:food_app/common/color_extension.dart';
 import 'package:food_app/Category/category.dart';
 import 'package:food_app/home/home_view.dart';
 import 'package:food_app/new_arrival/new_arrival.dart';
+import 'package:food_app/theme_provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class bottom_navigation_controller extends StatefulWidget {
   const bottom_navigation_controller({super.key});
@@ -42,7 +44,9 @@ class _bottom_navigation_controllerState extends State<bottom_navigation_control
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -54,16 +58,14 @@ class _bottom_navigation_controllerState extends State<bottom_navigation_control
           // Các trang tương ứng với các tab
           HomeView(),
           Category(),
-          TopFoodie(),
-          // News(),
           Account()
         ],
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
         child: GNav(
-          backgroundColor: Colors.white,
-          color: Colors.black,
+          backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
+          color: themeProvider.themeMode == ThemeMode.light ? Colors.black : Colors.white,
           activeColor: Colors.white,
           tabBackgroundColor: TColor.primary,
           padding: EdgeInsets.all(16),
@@ -77,13 +79,9 @@ class _bottom_navigation_controllerState extends State<bottom_navigation_control
               icon: Icons.map_outlined,
               text: 'Category',
             ),
-            GButton(
-              icon: Icons.rate_review,
-              text: 'New Arrival',
-            ),
             // GButton(
-            //   icon: Icons.bookmark,
-            //   text: 'News',
+            //   icon: Icons.rate_review,
+            //   text: 'New Arrival',
             // ),
             GButton(
               icon: Icons.person,

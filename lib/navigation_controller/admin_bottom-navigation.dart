@@ -4,7 +4,9 @@ import 'package:food_app/Order%20List/order_list.dart';
 import 'package:food_app/account/account.dart';
 import 'package:food_app/admin_manager/Category%20Control/category_controll.dart';
 import 'package:food_app/common/color_extension.dart';
+import 'package:food_app/theme_provider.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class AdminBottomNavigation extends StatefulWidget {
   const AdminBottomNavigation({super.key});
@@ -40,7 +42,9 @@ class _AdminBottomNavigationState extends State<AdminBottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
+      backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -59,8 +63,8 @@ class _AdminBottomNavigationState extends State<AdminBottomNavigation> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
         child: GNav(
-          backgroundColor: Colors.white,
-          color: Colors.black,
+          backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
+          color:themeProvider.themeMode == ThemeMode.light ? Colors.black : Colors.white,
           activeColor: Colors.white,
           tabBackgroundColor: TColor.primary,
           padding: EdgeInsets.all(16),

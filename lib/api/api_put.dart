@@ -44,7 +44,6 @@ Future<void> updateCategory(String CategoryId, Map<String, dynamic> updatedCateg
 // Customer Information
 Future<void> updateCustomerInformation(
     dynamic CustomerId, Map<String, dynamic> updatedData) async {
-  print(CustomerId);
   final url = Uri.parse('$FOOD_ITEM/Customers/PutCustomer/$CustomerId');
 
   final response = await http.put(

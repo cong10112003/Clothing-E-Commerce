@@ -8,9 +8,28 @@ import 'package:food_app/api/api_put.dart';
 import 'package:food_app/common/color_extension.dart';
 import 'package:intl/intl.dart';
 
-class ProductItemCellAdmin extends StatelessWidget {
+class ProductItemCellAdmin extends StatefulWidget {
   final Map item;
   const ProductItemCellAdmin({Key? key, required this.item}) : super(key: key);
+
+  @override
+  State<ProductItemCellAdmin> createState() => _ProductItemCellAdminState();
+}
+
+class _ProductItemCellAdminState extends State<ProductItemCellAdmin> {
+  late Map item;
+
+  @override
+  void initState() {
+    super.initState();
+    item = widget.item;
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      item = widget.item;
+    });
+  }
 
   void _showDeleteConfirmationDialog(BuildContext context, String productId) {
     showDialog(
@@ -35,6 +54,7 @@ class ProductItemCellAdmin extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Xóa sản phẩm thành công")),
                   );
+                  await _refresh();
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Xóa sản phẩm thất bại")),
@@ -166,27 +186,25 @@ class ProductItemCellAdmin extends StatelessWidget {
                           ),
                         );
                         if (updatedItem != null) {
-                                                // Update the item with the new data
-                                                try {
-                                                  await updateProduct(
-                                                      updatedItem['ProductID']
-                                                          .toString(),
-                                                      updatedItem);
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                        content: Text(
-                                                            'Product updated successfully')),
-                                                  );
-                                                } catch (e) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                        content: Text(
-                                                            'Failed to update Product: $e')),
-                                                  );
-                                                }
-                                              }
+                          // Update the item with the new data
+                          try {
+                            await updateProduct(
+                                updatedItem['ProductID'].toString(),
+                                updatedItem);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Product updated successfully')),
+                            );
+                            await _refresh();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Failed to update Product: $e')),
+                            );
+                          }
+                        }
                       },
                     ),
                     IconButton(

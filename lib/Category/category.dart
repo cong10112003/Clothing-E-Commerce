@@ -3,6 +3,8 @@ import 'package:food_app/Category/category_detail_view.dart';
 import 'package:food_app/api/api_get.dart';
 import 'package:food_app/common/color_extension.dart';
 import 'package:food_app/Category/category_cell.dart';
+import 'package:food_app/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class Category extends StatefulWidget {
   const Category({super.key});
@@ -14,14 +16,15 @@ class Category extends StatefulWidget {
 class _DiscoveryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      backgroundColor: TColor.bg,
+      backgroundColor: themeProvider.themeMode == ThemeMode.light ? TColor.bg : Colors.black87,
       body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
                 automaticallyImplyLeading: false,
-                backgroundColor: Colors.white,
+                backgroundColor: themeProvider.themeMode == ThemeMode.light ? Colors.white : Colors.black87,
                 elevation: 0,
                 pinned: true,
                 floating: false,

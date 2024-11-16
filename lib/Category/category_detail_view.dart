@@ -47,13 +47,14 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
           children: [
             Text(widget.item['CategoryName'] ?? 'Category'),
             TextButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddProduct(
                               item: _categoryInfo,
                             )));
+                _refreshProducts();
               },
               child: Text(
                 "Add",
@@ -74,20 +75,21 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
               child: RefreshIndicator(
                 onRefresh: _refreshProducts,
                 child: _products.isEmpty
-            ? ListView(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: Center(
-                      child: Text(
-                        "Don't have any item yet",
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : GridView.builder(
+                    ? ListView(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: Center(
+                              child: Text(
+                                "Don't have any item yet",
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : GridView.builder(
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 12),
                         gridDelegate:

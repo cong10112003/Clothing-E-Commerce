@@ -5,8 +5,10 @@ import 'package:food_app/cart/cart.dart';
 import 'package:food_app/common_widget/icon_text_button.dart';
 import 'package:food_app/common_widget/img_text_button.dart';
 import 'package:food_app/common_widget/selection_text_view.dart';
+import 'package:food_app/theme_provider.dart';
 
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/color_extension.dart';
@@ -77,6 +79,7 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     var media = MediaQuery.of(context).size;
     //format tien
     NumberFormat currencyFormat =
@@ -90,8 +93,9 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
-                expandedHeight: media.width * 0.667,
-                floating: false,
+                expandedHeight: media.width * 0.5,
+                floating: true,
+                pinned: true,
                 centerTitle: false,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Stack(
@@ -136,7 +140,9 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Colors.white,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? Colors.white
+                        : Colors.black87,
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                     child: Row(
@@ -174,7 +180,9 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                   ),
 
                   Container(
-                    color: Colors.white,
+                    color: themeProvider.themeMode == ThemeMode.light
+                        ? Colors.white
+                        : Colors.black87,
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                     child: Row(
@@ -211,9 +219,11 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                   GestureDetector(
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 0),
                       child: Container(
-                        color: Colors.white,
+                        color: themeProvider.themeMode == ThemeMode.light
+                            ? Colors.white
+                            : Colors.black87,
                         height: media.width * 0.7,
                         child: Container(
                             padding: const EdgeInsets.all(25),
@@ -233,7 +243,11 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                                             maxLines: 4,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: TColor.gray,
+                                                color:
+                                                    themeProvider.themeMode ==
+                                                            ThemeMode.light
+                                                        ? Colors.black
+                                                        : Colors.white,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w700),
                                           ),
@@ -264,7 +278,11 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                                             //minus
                                             Container(
                                               decoration: BoxDecoration(
-                                                  color: TColor.alertBackColor,
+                                                  color: themeProvider
+                                                              .themeMode ==
+                                                          ThemeMode.light
+                                                      ? TColor.alertBackColor
+                                                      : Colors.grey,
                                                   shape: BoxShape.circle),
                                               child: IconButton(
                                                 icon: Icon(Icons.remove),
@@ -278,7 +296,7 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                                                 child: Text(
                                                   quantityCount.toString(),
                                                   style: const TextStyle(
-                                                      color: Colors.black,
+                                                      color: Colors.blue,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 18),
@@ -288,7 +306,11 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                                             //plus
                                             Container(
                                               decoration: BoxDecoration(
-                                                  color: TColor.alertBackColor,
+                                                  color: themeProvider
+                                                              .themeMode ==
+                                                          ThemeMode.light
+                                                      ? TColor.alertBackColor
+                                                      : Colors.grey,
                                                   shape: BoxShape.circle),
                                               child: IconButton(
                                                 icon: Icon(Icons.add),
@@ -344,6 +366,7 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                     color: TColor.primary, // Màu sắc của Divider
                   ),
                   Container(
+                    
                     margin: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 15),
                     child: Stack(
@@ -370,7 +393,7 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                         const Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Text(
-                            "Order food Online",
+                            "Order now",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.white,
@@ -381,181 +404,6 @@ class _FoodItemDetailViewState extends State<ProductItemDetailView> {
                       ],
                     ),
                   ),
-
-                  SelectionTextView(
-                    title: "Photos",
-                    actionTitle: "See all",
-                    onSeeAllTap: () {},
-                  ),
-
-                  GestureDetector(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: ImgTextButton(
-                              title: "Food",
-                              subTitle: "(80)",
-                              image: "assets/img/c1.png",
-                              onPressed: () {},
-                            ),
-                          ),
-                          Expanded(
-                            child: ImgTextButton(
-                              title: "Ambience",
-                              subTitle: "(25)",
-                              image: "assets/img/c2.png",
-                              onPressed: () {},
-                            ),
-                          ),
-                          Expanded(
-                            child: ImgTextButton(
-                              title: "Menu",
-                              subTitle: "(10)",
-                              image: "assets/img/c3.png",
-                              onPressed: () {},
-                            ),
-                          ),
-                          Expanded(
-                            child: ImgTextButton(
-                              title: "All Photos",
-                              subTitle: "(115)",
-                              image: "assets/img/l1.png",
-                              onPressed: () {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Divider(
-                    height: 4,
-                    color: TColor.gray,
-                  ),
-
-                  SelectionTextView(
-                    title: "Details",
-                    actionTitle: "Read All",
-                    onSeeAllTap: () {},
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Call",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.gray,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "(212 789-7898)",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.primary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Cuisines",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.gray,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "Pizza Italian",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.primary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Average Cost",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.gray,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "\$20 - \$40",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: TColor.gray,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // //TODO: Trending this week
-                  // SelectionTextView(
-                  //   title: "Same Restaurants",
-                  //   onSeeAllTap: () {},
-                  // ),
-
-                  // SizedBox(
-                  //   height: media.width * 0.6,
-                  //   child: ListView.builder(
-                  //       scrollDirection: Axis.horizontal,
-                  //       padding: const EdgeInsets.symmetric(horizontal: 8),
-                  //       itemCount: trendingArr.length,
-                  //       itemBuilder: (context, index) {
-                  //         var fObj = trendingArr[index] as Map? ?? {};
-
-                  //         return GestureDetector(
-                  //           onTap: () {
-                  //             Navigator.push(
-                  //                 context,
-                  //                 MaterialPageRoute(
-                  //                     builder: (context) => RestaurantDetailView(
-                  //                           fObj: fObj,
-                  //                         )));
-                  //           },
-                  //           child: FoodItemCell(
-                  //             fObj: fObj,
-                  //           ),
-                  //         );
-                  //       }),
-                  // ),
                 ],
               ),
             ),
